@@ -1,0 +1,305 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report</title>
+    <style>
+        body{
+            margin: 50px;
+            font-size: 22px;
+            margin-bottom: 150px;
+        }
+        .heading{
+            text-align: center;
+        }
+        h3{
+            color: rgb(255, 108, 194);
+            font-style: oblique;
+        }
+        #designinfo, #eval{
+            text-align: center;
+            margin-inline: 100px;
+        }
+        #flowchartsection{
+            display: flex;
+            gap: 40px;
+        }
+        #testingtable{
+            margin: 100px;
+        }
+        #wordcount{
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 class="heading" style="font-size: 50px;"> Computer Science Report</h1>
+    <h3 class="heading">“Data is the new oil. Like oil, data is valuable, but if unrefined it cannot really be used.” - Clive Humby</h3>
+
+    <br><br><br><br>
+    
+    <h1>Meeting the brief</h1>
+
+    
+
+    <p>
+
+
+    </p>
+
+
+
+    <br><br><br><br>
+    <h1>Investigation:</h1>
+    <!-- In this section of the report you should show evidence of your own research on the brief, including
+    research on existing solutions, systems or ideas that are aligned to the brief. You should research
+    both existing interactive information systems that can inspire your project and the area or topic
+    that you wish to analyse in your information system.
+
+    As a starting point you may consider using the URLs provided earlier in this document, but please
+    note that this list is neither exclusive nor exhaustive. All references should be included in the
+    reference section of your report. -->
+
+    <p>While searching for a dataset, I did most of my hunting on  <a href="https://www.kaggle.com/datasets">Kaggle</a>, which was recommended in the project brief. I 
+        looked into many topics that intrigued me, but I was particularly interested in three: </p>
+    <ul>
+        <li>Streaming services</li>
+        <li>Space</li>
+        <li>Mental health</li>
+    </ul>
+    <p>I eventually settled on mental health statistics and disregarded the other topics as I felt they were either too broad or the data I found was insufficient and 
+        required compiling data from multiple datasets. Another reason I chose mental health is because there are many other subtopics I 
+        could look into, and psychology and psychiatry are huge passions of mine.
+    </p>
+    <p>I decided that I would focus on showing the statistics of 3-4 of the most common mental disorders worldwide, preferably over a large period of years. 
+        My information system will be intended for general use, meaning my target demographic is anyone who wants to investigate world-wide mental health statistics in a quick and easy-to-use way
+    </p><br>
+
+    <h3>My chosen dataset</h3>
+    <p>After searching, I found the following dataset on Kaggle: 
+        <a href="https://www.kaggle.com/datasets/imtkaggleteam/mental-health">https://www.kaggle.com/datasets/imtkaggleteam/mental-health</a>. <br>
+        I immediately chose this dataset because it had exactly what I was looking for. It included 5 disorders instead of my target 3-4 which was a welcome surprise. These disorders were:
+        <ol>
+            <li>Anxiety disorders</li>
+            <li>Bipolar disorders</li>
+            <li>Depressive disorders</li>
+            <li>Eating disorders</li>
+            <li>Schizophrenia  disorders</li>   
+        </ol>
+        The dataset also included data  over a range of 31 years (1999-2019) and when I inspected the CSV file, I also found out it included data for each country, continent and
+        the world, among other categories such as high, middle and low level incomes. This provided me with a plethora of useful and utilizable data.
+    </p>
+
+    <h3>Existing Information Systems</h3>
+    <p> During my investigation into existing mental health information systems, I found many different websites, each with their own advantages and disadvantages. 
+        Here are a couple of websites that heavily influenced my own project, as well as what I considered their pros and cons to be (links can be found in the references section of the report):
+        <ul>
+            <li><strong>WHO (World Health Organization): <br>Pros:</strong> Shows a lot of data and has many figures and statistics that are equally useful and interesting.
+                 Has a 'Questions' section where they answer popular questions. <br>
+                <strong>Cons:</strong> Only shows world statistics. Doesn't show data specific to countries and/or continents. Also has little to no graphs. 
+                Information is only shown in written form but isn't visualised.</li>
+            <br>
+            <li><strong>Our World In Data: <br>Pros:</strong> Has an abundance of graphs that show a massive amount of data in many different ways. Graphs are incredibly informative and interactive,
+                allowing you to hover to see data, change year ranges and even include animations at times.<br>
+                <strong>Cons:</strong> Graphs can be hard to sort through when trying to look for a specific disorder, type of graph, etc. </li>
+        </ul>
+    </p>
+
+
+
+    <br><br><br><br>
+    <h1>Plan and design</h1>
+    <!-- This section of the report should contain a clear description of the design of your project and how
+    it will meet the requirements set out in the brief.
+
+    You should explain each of the technologies that you plan to use and how they will be used within
+    your project. This should cover all aspects of software you plan to use for the artefact.
+
+    You should include a detailed flowchart which gives an overview of how your system will work. -->
+
+    <div id="designinfo">
+        <p>My project focuses on showing the prevalence  of different mental disorders in any specific country, continent or the world over a wide range of years (1990-2019). 
+            This information system will serve to inform people about the prevalence  of mental disorders in our world by visualising the information using different types of interactive graphs. 
+            I will develop this project using a Waterfall approach for the majority of it, prioritisng the completion of each previous phase before moving on in order to create a strong foundation
+            for each step and minimise risks along the way. 
+            <br><br><strong>Meeting Basic requirements</strong><br>
+            After obtaining the data from the dataset in the form of a CSV file, the data will be extraced, processed and cleaned in python
+            using Pandas, and all desired information will be stored using Firebase Realtime Database. The cleaned data will be analyzed using python and simple visualisations of
+            the main graphs will be created in the form of line charts and bar graphs by using Plotly. Python structures, namely lists and dictionaries (among others) will be used to manage and store 
+            the analyzed data. Using HTML, CSS, Javascript and Chart.js, a web-based interface will be created, displaying the created visualisations in an organised and interactive way.
+            <br><br><strong>Meeting Advanced requirements</strong><br>
+            Each of the graphs will be interactive in multiple ways. This includes a mix of hovvering to see details, modifying the range of years as well as choosing and changing different countries,
+            coninents, disorders and years to edit the information shown on the graph. Furthermore, a survey form will be created, where the user will be prompted to answer questions regarding the prevalence  of 
+            mental disorders in their own lives. Three or more types of input will be requested from the user. After vlaidation, this information will be stored and processed using Javascript and 
+            Firebase, and automatically upgrading graphs will present the user with data from their own survey entry as well as the entries of previous users. Finally, a Q&A (Questions & answers) section 
+            will provide users with answers and information to a series of questions crafted using inputs from the user.
+            <br><br>
+            My project places heavy emphasis on the brief's values of ethics, integrity and interactivity. Through the use of Html, Python, JS and more, it serves to better peoples understanding of mental disorders in not just our lives, but the lives of people around us.
+        </p>
+    </div>
+    <p>The first flowchart below shows the steps taken to do the project in order, using the Waterfall approach. The second is a detailed overview of how the interactive wesite will function</p>
+    <div id="flowchartsection">
+        <img src="waterfallflowchart.png" alt="Waterfall flowchart" class="flowchart">
+        <!-- <img src="artefactflowchart.png" alt="Artefact flowchart" class="flowchart"> -->
+    </div>
+
+
+
+
+
+    <br><br><br><br>
+    <h1>Create</h1>
+    <h3>Progress log</h3>
+    <p><strong>Week 1:</strong>
+        <ul>
+            <li>Dataset searching began. I used the links provided in the brief as a starting point.</li>
+            <li>Dataset was chosen from Kaggle.</li>
+        </ul>
+        <strong>Week 2:</strong>
+        <ul>
+            <li>Began cleaning my data using Python and Pandas.</li>
+            <li>As I sorted through the data, I decided which parts I wanted to show in my artefact.</li>
+        </ul>
+        <strong>Week 3:</strong>
+        <ul>
+            <li>Encountered problems cleaning data. After alot of work using Pandas, the issue was resolved.</li>
+            <li>After uploading my cleaned data to Firebase, I started planning the layout of my website and graphs.</li>
+        </ul>
+        <strong>Week 4:</strong>
+        <ul>
+            <li>Started anazlysing my data in Python. I tried out many graphing tools but eventually decided to use Plotly for my python Graphs.</li>
+            <li>Python structures (lists, dictionaries, etc.) were used to store the data in my desired format.</li>
+        </ul>
+        <strong>Week 5:</strong>
+        <ul>
+            <li>Basic representations were made succesfsully in Python.</li> 
+            <li>Analyzed data was stored in firebase to use for graphing.</li>
+        </ul>
+        <strong>Week 6:</strong>
+        <ul>
+            <li>Website creation began. I started with the Graphs page and created the layout using HTML and CSS.</li>
+            <li>After finding Plotly difficult to use in Javascript, I decided to use Chart.js for my website.</li>
+        </ul>
+        <strong>Week 7:</strong>
+        <ul> 
+            <li>Graphs were made. I decided how I was gonna make each one interactive and considered what to do based on the data that each graph showed.</li>
+            <li>Basic interactivity was added with the use of event listeners allowing users to toggle averages and change the year.</li>
+        </ul>
+        <strong>Week 8:</strong>
+        <ul>
+            <li>More complex inputs were added, allowing the user to edit ranges and choose countries, continents and disorders using radio inputs and lists.</li>
+            <li>Functions and loops were made to check for invalid inputs. Graphs page was completed.</li>
+        </ul>
+        <strong>Week 9:</strong>
+        <ul>
+            <li>A different page was created for the survey. I decided what questions I wanted to ask and created different types of inputs.</li>
+            <li>Code was added to validate each input. Some were set as required while others were left as optional. Javascript code was added to check for inputs that were invalid or out of range.</li>
+        </ul>
+        <strong>Week 10:</strong>
+        <ul>
+            <li>Graphs were made to show the user information using the updated data from their submittion in the survey.</li>
+            <li>I began deciding what questions I was gonna have for my Q&A section and created the basic layout for the webpage.</li>
+        </ul>
+        <strong>Week 11:</strong>
+        <ul>
+            <li>Q&A section was completed. Code was added to display an answer after the user enters their question, and whenever it's edited after</li>
+            <li>Began finall testing and debugging to ensure everything functioned properly. This was done in Python as well as HTML and Javascript</li>
+        </ul>
+
+        <strong>Week 2:</strong>
+        <ul>
+            <li>Final adjustments were made. The website styling was polished and chart descriptions were added.</li>
+            <li>A final review was done to ensure     that I achieved my goals and met all of the basic and advanced requirements</li>
+        </ul>
+    </p>
+    
+    <h3>Testing</h3>
+    <p>Testing was conducted throughout the entire project to ensure that the code ran smoothly and worked properly. This was most important when validating the inputs for the form. Below is a testing table showing the goals 
+        of one function I used to validate inputs, as well as the the results of diffrent inputs after testing:
+    </p>
+    
+    <div id="testingtable">
+        <img src="testingtable.png" alt="Testing Table" width="700px" height="500px">
+    </div>
+
+    <h3>Problems</h3>
+    <p>The most challenging problem I encountered during development was figuring out how to create the graphs for the survey using the updated data after each submittion,
+        rather than the data that was imported when the webpage first ran. I considered many different ways to solve this, including refreshing the page after every submittion.
+        What I decided to do was to update the value of my variable 'data', which stored everything inside the database, after every submition. I did this by taking another snapshot of the database and then using it to update the variable.
+        Right after, I call my function that makes the graphs and I pass in the updated variable. This allows the graphs to be shown immediately after submition and allows them to include the data from the recent submition
+    </p>
+    <P>Another problem I experienced was while cleaning my data from my dataset. In the dataset, each row stored the data for a country, continent or the world in a specific year. There was a column that stored the code which corresponds to 
+        every country (eg. Afghanistan = AFG, Ireland = IRE). While searching for empty values, I found that countries and world-wide data had codes. Continents and other sub-headings did not. At first, I was stumped. I didn't want to 
+        completely disregard the codes as they were useful for identifying countries, but adding codes to the missing values would require me to compile data from outside my dataset. Eventually, I decided to use these missing values to my advantage. 
+        I sorted every row with a code into a dictionary that stored the values for each country, and then added the rows That stored the values of each continent into a different dictionary. I uploaded my data to Firebase sorted by year, 
+        and then world-wide data, country data and continent data. 
+    </P>
+
+    <h3>Analytics</h3>
+    <p>Below is a pseudocode representation of how I analyzed the (clean) data and prepared it for graphing</p>
+    <ol>
+        <li>IMPORT data from Firebase</li>
+        <li>CREATE variables (dictionaries, lists) that store data from each subheading inside Firebase</li>
+        <li>FOR every year:
+            <ol type="a"><li>Extract all unique disorder names, country names, continent names, etc. </li>
+                <li>Use these to create lists for axes labeling and data categroisation </li>
+                <li>PRINT the data at each step to verify functionality</li></ol>
+        </li>
+        <li>Visualise data:
+            <ol type="a"><li>Use sorted data to create charts/graphs in Plotly</li></ol>
+        </li>
+        <li>UPLOAD the data to Firebase under a unique subheading to be accessed for graphing</li>
+    </ol>
+
+    <p><strong>Explaination:</strong><br>
+        For the analytics section of my project, I made an algorithm that store the names of every continent, country, year and disorder in seperate lists. This I incredibly useful for two rasons: the first is using the years and disorders 
+        as axes for my bar and line graphs. The second is for accessing the countries and continents I have data on in a quick and easy way. I used this in my website to give the user a list of countries to choose from and to check if they inputted an invalid country/continent.
+        By storing them in seperate lists, the data can be accessed in a fast as efficient way, instead of having to create functions and loops to sort through the original data 
+    </p>
+
+ 
+
+    <br><br><br><br>
+    <h1>Evaluation</h1>
+    <div id="eval">
+        <p>In regards to the brief, the project meets all basic and advanced requirements. A dataset was selected and the data was cleaned and stored using Python and Firebase. Analytics were carried
+            out in Python and data from those analysations was used to create a set of basic graphs, with axes and labels, to visually represent the data. a web-based interface was made, and it
+            displayed the data to the user in an interactive way. <br>
+            Each graph has its own set of interactive features. These include choosing the range, changing the year, country, continets, and showing averages. On a seperate webpage, a survey form was 
+            made. The form takes in inputs from the user, validates it and stores the new submition in Firebase alongside previous ones. Two graphs are then created, showing the user information about
+            the collection of data attained from their submittion alongside previous ones. the reccomendations were made in the form of a Q&A section that gives information to the user based on a
+            curated question. <br><br>
+            While my project meets all the requirementss, I beleive there is still alot of room for progress. For example, using more graph types, such as pie charts and scatter plots, would help show 
+            the user information in more unique ways. Aditionally, allowing the user to search information based on disorder rather than geographic location would make the data much more 
+            accessible and easy to navigate. <br><br>
+            In the future, I believe adding more information about each chart could help the reader understand the data they are viewing. The content of these descriptions could be set to automatically update
+            depending on what variables the user chooses, for example every time they change the year or choose a new country.
+        </p>
+    </div>
+
+
+
+
+
+    <br><br><br><br>
+    <h1>References</h1>
+    <p>WHO Mental Health: <a href="https://www.who.int/health-topics/mental-health#tab=tab_1">https://www.who.int/health-topics/mental-health#tab=tab_1</a></p>
+    <p>Our World In Data Mental Health: <a href="https://ourworldindata.org/mental-health">https://ourworldindata.org/mental-health</a></p>
+    <p>Design (used to mske logo): <a href="https://www.design.com/s/logo-maker?code=25OFFSEM&utm_medium=cpc&utm_source=google&utm_campaign=europe_top_tier&utm_adgroup=logo_language&utm_content=733558413998&utm_keyword=logotipo+online&utm_network=g&gad_source=1&gclid=Cj0KCQjws-S-BhD2ARIsALssG0ZbnvxrH5YKwahiOhUPaNcDC1X0f68v2-l1xIU9IWHA3q56oTKo-PMaApB_EALw_wcB">www.design.com</a></p>
+
+
+
+
+
+    <br><br><br><br>
+    <h1>Summary word count</h1>
+    <div id="wordcount">
+        <img src="wordcount.png" alt="Word Count">
+    </div>
+    
+
+
+</body>
+</html>
