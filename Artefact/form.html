@@ -1,0 +1,432 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js">
+    </script>
+    <title>Form</title>
+    <style>
+        body{
+            font-family: 'Courier New', Courier, monospace;
+            background-color: rgb(0, 21, 30);
+            margin-inline: 50px;
+            color: rgb(255, 255, 255);
+            margin-bottom: 50px;
+        }
+ 
+        h1{
+            color: rgb(255, 255, 1);
+            text-align: center;
+            font-size: 300%;
+        }
+        #myform{
+            background-color: rgba(255, 255, 1, 0.836);
+            color:rgb(53, 53, 53);
+            border-radius: 20px;
+            gap: 30px;
+            width: fit-content;
+            padding: 20px;
+            margin-block: 30px;
+            font-size: large;
+            font-weight: bold;
+        }
+        .formsection{
+            display: flex;
+            justify-content: center;
+            background-color: rgba(0, 64, 92, 0.849);
+            border-radius: 20px;
+        }
+        .graphs{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+        }
+        .piechartarea .barchartarea{
+            flex: 1;
+            align-items: center;
+        }
+        /* canvas{
+            flex: 1;
+        } */
+        div{
+            margin: 30px;
+        }
+        input button{
+            border-radius: 4px;
+            margin-left: 5px;
+        }
+        input[name="knownpeople"]{
+            margin-left: 20px;
+        }
+        input[name="selfdisorder"]{
+            margin-left: 20px;
+        }
+        #navigationbar{
+            margin: 0px;
+            font-size: 25px;
+            padding: 20px;
+        }
+        a{
+            color: rgb(15, 239, 255);
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <div id="navigationbar"> 
+        <a href="index.html" class="button">HOME  |</a> <a href="graphs.html" class="button">GRAPHS  |</a>
+        <a href="form.html" class="button">SURVEY  |</a> <a href="qna.html" class="button">Q&A</a>
+    </div>
+
+    <h1>F O R M</h1>
+
+    <div class="formsection">
+        <form id="myform">
+            <div class="inputsection">
+                <label for="age">Enter your age</label> 
+                <input type="number" id="age" style="width: 60px;" required><br>
+            </div>
+
+            <div class="inputsection">
+                <label for="country">Where are you from?</label>
+                <input list="countrychoices" id="country" required><br>
+                <datalist id="countrychoices"></datalist>
+            </div>
+            
+            <div class="inputsection">
+                <label>Which of these disorders are you diagnosed with, if any?</label><br>
+                <input type="checkbox" id="anx" name="selfdisorder" value="Anxiety">
+                <label for="anx">Anxiety</label><br>
+                <input type="checkbox" id="bip" name="selfdisorder" value="Bipolar">
+                <label for="bip">Bipolar</label><br>
+                <input type="checkbox" id="dep" name="selfdisorder" value="Depressive">
+                <label for="dep">Depressive</label><br>
+                <input type="checkbox" id="eat" name="selfdisorder" value="Eating">
+                <label for="eat">Eating</label><br>
+                <input type="checkbox" id="scz" name="selfdisorder" value="Schizophrenic">
+                <label for="scz">Schizophrenic</label>
+            </div>
+
+            <div class="inputsection">
+                <label>How many people do you know with at least one of the above disorders?</label><br>
+                <input type="radio" id="zero" name="knownpeople" value="0" required>
+                <label for="zero">0</label><br>
+                <input type="radio" id="one" name="knownpeople" value="1">
+                <label for="one">1</label><br>
+                <input type="radio" id="two" name="knownpeople" value="2">
+                <label for="two">2</label><br>
+                <input type="radio" id="three" name="knownpeople" value="3">
+                <label for="three">3</label><br>
+                <input type="radio" id="four" name="knownpeople" value="4">
+                <label for="four">4</label><br>
+                <input type="radio" id="five" name="knownpeople" value="5">
+                <label for="five">5+</label>
+            </div>
+            <div class="inputsection" style="text-align: center;">
+                <label for="otherdisorders">Do you or anyone you know suffer from a different mental disorder? <br>If so enter one such disorder below:</label><br>
+                <input type="text" id="otherdisorder" style="width:100%;height: 60px;border-radius: 15px;padding-inline: 10px;margin-top: 10px;"><br>
+            </div>
+            <div class="inputsection" style="display: flex;justify-content: center">
+                <!-- <button id="submitform">Submit</button>  -->
+                <input type="submit" value="Submit">
+            </div>
+
+        </form>
+    </div>
+
+    <div class='graphsection'>
+        <div class="graphs">
+            <div id="piechartarea"><div id="piechartinfo"></div>
+                <canvas id="piechart"></canvas>
+            </div>
+            <div id="barchartarea"><div id="barchartinfo"></div>
+                <canvas id="barchart"></canvas>
+            </div>
+            
+        </div>
+
+        <div id="textdiv"></div>
+
+    </div>
+
+
+    <script type="module">
+ 
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyAxpEAdCC0wnp3w3PiSJKqwDOACCU5ZEyc",
+            authDomain: "leaving-cert-database-a27d6.firebaseapp.com",
+            databaseURL: "https://leaving-cert-database-a27d6-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "leaving-cert-database-a27d6",
+            storageBucket: "leaving-cert-database-a27d6.firebasestorage.app",
+            messagingSenderId: "106716925552",
+            appId: "1:106716925552:web:192f0b0505223a3c10eeb5"
+        };
+     
+        //               getting data from my firebase
+     
+        const app = initializeApp(firebaseConfig); // Initialize Firebase
+     
+        import { getDatabase, ref, set, get, update, child } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+        const database = getDatabase();
+        const firebaseRef = ref(database);
+        let data = null;
+
+        let piechart = null
+        let barchart = null
+
+        get(firebaseRef).then((snapshot) => { //getting data from firebase and storing it as a dictionary
+            data = snapshot.val();
+            // console.log("got data", data);
+            let years = data['years'];
+       
+            let graphingdata = data['graphingdata'];
+            let allyears = graphingdata['allyears'];
+            let allcountries = graphingdata['allcountries'];
+            let allcontinents = graphingdata['allcontinents'];
+            let alldisorders = graphingdata['alldisorders'];
+            let colours = ['rgb(255, 133, 219)','rgb(75, 192, 192)','rgb(119, 221, 119)','rgb(221, 214, 119)','rgb(221, 119, 119)'];
+
+            let choosingcountry = document.getElementById("countrychoices");
+            allcountries.forEach(browser => {
+                let option = document.createElement("option");
+                option.value = browser;
+                choosingcountry.appendChild(option);
+            })
+
+
+            let submitform = document.getElementById("myform");
+            submitform.addEventListener('submit', updatefirebase);
+
+            function updatefirebase(event){
+                event.preventDefault();
+                // alert('yurr')
+                let age = document.getElementById('age').value
+                let country = document.getElementById('country').value
+                let otherdisorder = document.getElementById('otherdisorder').value
+                let knownpeople = document.querySelector('input[name="knownpeople"]:checked')
+                let checkboxes = document.querySelectorAll('input[name="selfdisorder"]');
+                let selfdisorderinputs = []; // array that'll store the values of whatever checkboxes are ticked  
+                let chosenval = null
+
+                // validating age
+                if(age<0){
+                    alert('Invalid age.')
+                    return null
+                } 
+
+                if( !allcountries.includes(country) ){
+                    alert('Please enter a country in the list of options. Case sensetive.')
+                    return null
+                }
+
+                for (const x of checkboxes) {if (x.checked) {selfdisorderinputs.push(x.value)}} // adds value of a checked box to the array
+                if (knownpeople) {chosenval = knownpeople.value} // store the value of the selected radio input
+
+                if(selfdisorderinputs.length == 0){
+                    selfdisorderinputs.push('null')
+                }
+
+                let upload = {'Age':age,
+                    'Country':country,
+                    'Self disorder':selfdisorderinputs,
+                    'Known people':chosenval,
+                    'Other disorder':otherdisorder
+                }
+
+                let key = ''
+                if (Object.keys(data).length < 3){
+                    key = 'form/Entry ' + 1
+                }
+                else{
+                    let entries = data['form']
+                    let lastentry = (Object.keys(entries))[Object.keys(entries).length - 1]
+                    let keynum = Number(lastentry.split(" ")[lastentry.split(" ").length -1]) + 1
+                    key = 'form/Entry ' + keynum
+                }
+                // console.log(upload)
+                
+                
+                update(ref(database, key), upload)
+                    .then(() => {
+                        get(firebaseRef).then((snapshot) => {
+                            data = snapshot.val();
+                            makegraphs(data)
+                        }).catch((error) => {
+                            console.error('Error fetching updated data:', error);
+                        });
+                    })
+                    .catch((error) => {
+                        console.error('Error updating Firebase:', error);
+                    });
+                alert('Data submitted!'); //prints after data is uploaded
+                document.getElementById('myform').reset()
+                
+
+                
+            }
+
+        
+        })
+
+        function makegraphs(data){
+            //adding graph info
+            let pieinfo = document.getElementById('piechartinfo')
+            let barinfo = document.getElementById('barchartinfo')
+
+            let pietext = 'No. of people survey participants know with a mental disorder'
+            let bartext = 'No. of survey participants diagnosed with each disorder'
+
+            pieinfo.innerText = pietext
+            barinfo.innerText = bartext
+
+            console.log('makegraphsran')
+            let formdata = data['form']
+            let formdatavalues = Object.values(formdata)
+
+            //getting data
+            let barchartcount = [0,0,0,0,0,0]
+            let piechartcount = [0,0,0,0,0,0]
+
+            for(let i = 0; i < formdatavalues.length; i++){
+                let currentselfdisorders = formdatavalues[i]['Self disorder']
+                let currentknownpeople = formdatavalues[i]['Known people']
+
+                for(let j = 0; j < currentselfdisorders.length; j++){
+                    if (currentselfdisorders[j] == 'Anxiety'){
+                        barchartcount[0] += 1
+                    }
+                    else if (currentselfdisorders[j] == 'Bipolar'){
+                        barchartcount[1] += 1
+                    }
+                    else if (currentselfdisorders[j] == 'Depressive'){
+                        barchartcount[2] += 1
+                    }
+                    else if (currentselfdisorders[j] == 'Eating'){
+                        barchartcount[3] += 1
+                    }
+                    else if (currentselfdisorders[j] == 'Schizophrenic'){
+                        barchartcount[4] += 1
+                    }
+                }
+
+                if (currentknownpeople == '0'){
+                    piechartcount[0] += 1
+                }
+                else if (currentknownpeople == '1'){
+                    piechartcount[1] += 1
+                }
+                else if (currentknownpeople == '2'){
+                    piechartcount[2] += 1
+                }
+                else if (currentknownpeople == '3'){
+                    piechartcount[3] += 1
+                }
+                else if (currentknownpeople == '4'){
+                    piechartcount[4] += 1
+                }
+                else if (currentknownpeople == '5'){
+                    piechartcount[5] += 1
+                }
+
+            }
+
+
+            // bar chart
+            barchart = new Chart('barchart', {
+                type: 'bar',
+                data:{
+                    labels: ['Anxiety', 'Bipolar', 'Depressive', 'Eating', 'Schizophrenic'],
+                    datasets: [{
+                        label: ' ',
+                        data: barchartcount, 
+                        backgroundColor: [
+                        'rgba(255, 133, 219, 0.4)',
+                        'rgba(75,  192, 192, 0.4)',
+                        'rgba(119, 221, 119, 0.4)',    
+                        'rgba(221, 214, 119, 0.4)',
+                        'rgba(221, 119, 119, 0.4)',],
+                        borderColor: [
+                        'rgba(255, 133, 219, 0.7)',
+                        'rgba(75,  192, 192, 0.7)',
+                        'rgba(119, 221, 119, 0.7)',    
+                        'rgba(221, 214, 119, 0.7)',
+                        'rgba(221, 119, 119, 0.7)'
+                    ],
+                        borderWidth: 1
+                    }] },
+                options: {
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: "#FFFFFF",
+                                font: {
+                                    size: 14
+                                },
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: "#FFFFFF",
+                                font: {
+                                    size: 14
+                                },
+                            },
+                            beginAtZero: true,
+                            min: 0 
+                        }
+                    }
+                }
+            })
+
+            // pie chart
+            piechart = new Chart('piechart', {
+                type: 'pie',
+                data: {
+                    labels: ['zero poeple', '1 person', '2 people', '3 people','4 people','5 or more'], 
+                    datasets: [{
+                        data: piechartcount, 
+                        backgroundColor: [
+                            'rgba(255, 133, 219, 0.4)',
+                            'rgba(75, 192, 192, 0.4)',
+                            'rgba(119, 221, 119, 0.4)',    
+                            'rgba(221, 214, 119, 0.4)',
+                            'rgba(221, 119, 119, 0.4)',
+                            'rgba(197, 179, 245, 0.4)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 133, 219, 0.7)',
+                            'rgba(75, 192, 192, 0.7)',
+                            'rgba(119, 221, 119, 0.7)',    
+                            'rgba(221, 214, 119, 0.7)',
+                            'rgba(221, 119, 119, 0.7)',
+                            'rgba(197, 179, 245, 0.7)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: false 
+                        }
+                    }
+                }
+            })
+        }
+        
+
+
+    </script>
+
+
+
+
+</body>
+
+</html>

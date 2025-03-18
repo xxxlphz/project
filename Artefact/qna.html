@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q&A</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: rgb(0, 21, 30);
+            color: white;
+        }
+ 
+        h1 {
+            text-align: center;
+            font-size: 300%;
+            color: rgb(255, 255, 1);
+        }
+ 
+        .qna-container {
+            background-color: rgb(0, 64, 92);
+            border-radius: 20px;
+            padding: 70px;
+            margin: 30px auto;
+            width: 80%;
+        }
+ 
+        .question {
+            font-weight: bold;
+            font-size: larger;
+            margin-bottom: 10px;
+        }
+ 
+        .answer {
+            margin-left: 20px;
+            margin-bottom: 20px;
+            font-size: larger;
+        }
+        .dropdown{
+            width: fit-content;
+            max-width: max-content;
+        }
+        #navigationbar{
+            margin-inline: 42px;
+            font-size: 25px;
+            padding: 20px;
+        }
+        a{
+            color: rgb(15, 239, 255);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+ 
+    <div id="navigationbar"> 
+        <a href="index.html" class="button">HOME  |</a> <a href="graphs.html" class="button">GRAPHS  |</a>
+        <a href="form.html" class="button">SURVEY  |</a> <a href="qna.html" class="button">Q&A</a>
+    </div>
+ 
+    <h1>QUESTIONS & ANSWERS</h1>
+ 
+    <form class="qna-container">
+        <div class="question">
+ 
+            Q: What country had similar <input list="disorderchoices" id="firstdisorders" class="dropdown" placeholder="Anxiety   "> 
+            disorder rates to  <input list="countrychoices" id="firstcountry" class="dropdown" placeholder="country">  
+            in <input type="number" id="firstquestionyear" name="year" min="1990" max="2019" placeholder="year">?
+        
+        </div><br><br>
+        <div id="answer1"></div><br><br><br>
+        <!-- A: This webpage is designed to host a Q&A interface for users. -->
+ 
+        <div class="question">
+ 
+            Q: What country ranked <input list="rankinglist" id="ranking" class="dropdown" placeholder="1st, 2nd, 3rd..."> 
+            for highest <input list="disorderchoices" id="seconddisorders" class="dropdown" placeholder="Anxiety"> 
+            disorder rates in <input type="number" id="secondquestionyear" name="year" min="1990" max="2019" placeholder="year">?
+ 
+        </div><br><br>
+        <div id="answer2"> </div><br><br><br>
+        <!-- A: Yes! You can type your question below and submit it. -->
+ 
+        
+        <datalist id="countrychoices"></datalist>
+        <datalist id="disorderchoices"></datalist>
+        <datalist id="rankinglist"></datalist>
+    </form>
+ 
+ 
+ 
+    <script type="module">
+    
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyAxpEAdCC0wnp3w3PiSJKqwDOACCU5ZEyc",
+            authDomain: "leaving-cert-database-a27d6.firebaseapp.com",
+            databaseURL: "https://leaving-cert-database-a27d6-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "leaving-cert-database-a27d6",
+            storageBucket: "leaving-cert-database-a27d6.firebasestorage.app",
+            messagingSenderId: "106716925552",
+            appId: "1:106716925552:web:192f0b0505223a3c10eeb5"
+        };
+    
+        //               getting data from my firebase
+    
+        const app = initializeApp(firebaseConfig); // Initialize Firebase
+    
+        import { getDatabase, ref, set, get, update, child } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+        const database = getDatabase();
+        const firebaseRef = ref(database);
+        let data = null;
+        get(firebaseRef).then((snapshot) => { //getting data from firebase and storing it as a dictionary
+            let data = snapshot.val();
+            // console.log("got data", data);
+            let years = data['years'];
+    
+            let graphingdata = data['graphingdata'];
+            let allyears = graphingdata['allyears'];
+            let allcountries = graphingdata['allcountries'];
+            let allcontinents = graphingdata['allcontinents'];
+            let alldisorders = graphingdata['alldisorders'];
+ 
+            let choosingcountry = document.getElementById("countrychoices");
+            let choosingdisorder = document.getElementById("disorderchoices");
+            let rankinglist = document.getElementById("rankinglist");
+ 
+            allcountries.forEach(browser => {
+                let option = document.createElement("option");
+                option.value = browser;
+                choosingcountry.appendChild(option);
+            });
+ 
+            alldisorders.forEach(browser => {
+                let option = document.createElement("option");
+                option.value = browser;
+                choosingdisorder.appendChild(option);
+            });
+            for(let i = 1; i <= allcountries.length; i++){
+                let option = document.createElement("option")
+                if(i%10 == 1 && i != 11){
+                    option.value = i + 'st'
+                    rankinglist.appendChild(option)
+                }
+                else if(i%10 == 2 && i != 12){
+                    option.value = i + 'nd'
+                    rankinglist.appendChild(option)
+                }
+                else if(i%10 == 3 && i != 13){
+                    option.value = i + 'rd'
+                    rankinglist.appendChild(option)
+                }
+                else {
+                    option.value = i + 'th'
+                    rankinglist.appendChild(option)
+                }
+            }  
+ 
+            let ranking = {}
+ 
+            for(let i=0; i<Object.keys(years).length; i++){
+                let yr = 1990 + i
+                
+                let yearanx = {};
+                let yearbip = {};
+                let yeardep = {};
+                let yeareat = {};
+                let yearsch = {};
+ 
+                let yrcountries = years[yr]['Countries']
+ 
+                for (const [key, value] of Object.entries(yrcountries)) {
+                    for (const [key2, value2] of Object.entries(value)) {
+                        
+                        if (key2.includes("Anxiety")){
+                            let val2 = value2.toFixed(3)
+                            yearanx[key] = val2
+                        }
+                        else if (key2.includes("Bipolar")){
+                            let val2 = value2.toFixed(3)
+                            yearbip[key] = val2
+                        }
+                        else if (key2.includes("Depressive")){
+                            let val2 = value2.toFixed(3)
+                            yeardep[key] = val2
+                        }
+                        else if (key2.includes("Eating")){
+                            let val2 = value2.toFixed(3)
+                            yeareat[key] = val2
+                        }
+                        else if (key2.includes("Schizo")){
+                            let val2 = value2.toFixed(3)
+                            yearsch[key] = val2
+                }   }   }
+                let returnlist = [yearanx,yearbip,yeardep,yeareat,yearsch]
+ 
+                for (let y = 0; y < returnlist.length; y++) {
+                    let sortedArray = Object.entries(returnlist[y]).sort((a, b) => b[1] - a[1]);
+                    returnlist[y] = Object.fromEntries(sortedArray);
+                }
+ 
+                ranking[yr] = {
+                    'Anxiety': returnlist[0],
+                    'Bipolar': returnlist[1],
+                    'Depressive': returnlist[2],
+                    'Eating': returnlist[3],
+                    'Schizophrenia': returnlist[4],
+                }
+            }
+            // console.log(ranking)
+ 
+            // -------------------------------------------handling inputs----------------------------------------------
+ 
+            //first question event listeners
+            let firstdisorders = document.getElementById("firstdisorders")
+            let firstcountry = document.getElementById("firstcountry")
+            let firstquestionyear = document.getElementById("firstquestionyear")
+ 
+            firstdisorders.addEventListener("input", handleDiv1Inputs);
+            firstcountry.addEventListener("input", handleDiv1Inputs);
+            firstquestionyear.addEventListener("change", handleDiv1Inputs);
+ 
+            // second question event listeners
+            let rankingchoice = document.getElementById("ranking")
+            let seconddisorders = document.getElementById("seconddisorders")
+            let secondquestionyear = document.getElementById("secondquestionyear")
+            rankingchoice.addEventListener("input", handleDiv2Inputs);
+            seconddisorders.addEventListener("input", handleDiv2Inputs);
+            secondquestionyear.addEventListener("change", handleDiv2Inputs);
+ 
+            // function to check all inputs in question1
+            function handleDiv1Inputs() {
+                let input1 = firstdisorders.value;
+                let input2 = firstcountry.value;
+                let number = firstquestionyear.value
+                if (input1 && input2 && number) {
+                    updateDiv1(input1,input2,number); // runs when all inputs are filled and on any change
+                }
+            }
+ 
+            // function to check all inputs in question2
+            function handleDiv2Inputs() {
+                let input1 = seconddisorders.value;
+                let input2 = rankingchoice.value;
+                let number = secondquestionyear.value;
+ 
+                if (input1 && input2 && number) {
+                    updateDiv2(input1,input2,number); // same as above, runs when all inputs are filled and on any change
+                }
+            }
+ 
+            
+ 
+            // function to give answer for question 1
+            function updateDiv1(disorder,country,year) {
+                // Q1: What country had similar [disorder] rates to [country] in [year]?
+                let yearsrankings = ranking[year][disorder]
+                // console.log(yearsrankings)
+                let countrydis = yearsrankings[country]
+                let chosenindex = Object.keys(yearsrankings).indexOf(country)
+                let similarcountries = []
+ 
+ 
+                for(let i = 0; i < Object.values(yearsrankings);i++){ // storing countries with exact same rate inside a list (if there is any)
+                    if (Object.values(yearsrankings)[i] == countrydis){
+                        similarcountries.push(Object.keys(yearsrankings)[i])
+                }   }
+                
+                let ans = ''
+ 
+                if(similarcountries.length == 2){
+                    while (similarcountries.indexOf(country) !== -1) {
+                        similarcountries.splice(similarcountries.indexOf(knownValue), 1)
+                    }
+ 
+                    ans  = `${similarcountries[0]}  had the exact same ${disorder.toLowerCase()} disorder rate of ${countrydis} !`                    
+                }
+ 
+                else if(similarcountries.length > 2){
+                    while (similarcountries.indexOf(country) !== -1) {
+                        similarcountries.splice(similarcountries.indexOf(knownValue), 1)
+                    }
+ 
+                    let answerstring = ''
+ 
+                    for(let x = 0; x<similarcountries.length; x++){
+                        if( x != similarcountries.length -1){
+                            answerstring += `${similarcountries[x]}, `
+                        }
+                        else{
+                            answerstring += `and ${similarcountries[x]} `
+                    }   }
+                    // console.log(answerstring)
+ 
+                    ans = answerstring + `had the exact same ${disorder.toLowerCase()} disorder rate of ${countrydis}) !`   
+                }
+ 
+                else{
+                    let countrynames = []
+                    let countryvals  = []
+ 
+                    let index = Object.keys(yearsrankings).indexOf(country)
+ 
+                    countrynames.push(Object.keys(yearsrankings)[index+1]) // storing the countries on either side of the inputed one in a list as they have the most similar values
+                    countrynames.push(Object.keys(yearsrankings)[index-1])
+ 
+                    countryvals.push(Object.values(yearsrankings)[index+1]) // storing the values for each country as well
+                    countryvals.push(Object.values(yearsrankings)[index-1])
+ 
+                    if((countryvals[0] - countryvals[1]) > 0){
+                        let ans  = `${countrynames[0]}  had the closest ${disorder.toLowerCase()} disorder rate in ${year} with a value of ${countryvals[0]} ( ${(countrydis - countryvals[0]).toFixed(3)} difference) `
+                    }
+                    else{
+                        ans  = `${countrynames[1]}  had the closest ${disorder.toLowerCase()} disorder rate in ${year} with a value of ${countryvals[1]} ( ${(countryvals[1] - countrydis).toFixed(3) } difference) `
+                    }
+ 
+                }
+ 
+                document.getElementById("answer1").innerText = ans
+ 
+            }
+ 
+            // function to give answer for question 2
+            function updateDiv2(disorder,rank,year) {
+                // Q2: What country ranked [ranking] for highest [disorder] rates in [year]?
+                let yearsrankings = ranking[year][disorder]
+                let index = rank.slice(0, -2)
+                // console.log(index)
+                // console.log(yearsrankings)
+                let ans = `In ${year}, ${Object.keys(yearsrankings)[index]} ranked ${rank}, with %${Object.values(yearsrankings)[index]} of the population suffering from ${disorder.toLowerCase()} disorder(s)`
+                document.getElementById("answer2").innerText = ans
+            }
+        })
+                
+            
+ 
+    </script>
+ 
+</body>
+</html>
+ 
